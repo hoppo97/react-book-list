@@ -1,10 +1,11 @@
 import React from 'react'
+import { CurrentBook } from '../components/CurrentBook'
+
+
 
 const BookPage = () => {
   return (
-    <div>
-      
-    </div>
+    <CurrentBook />
   )
 }
 

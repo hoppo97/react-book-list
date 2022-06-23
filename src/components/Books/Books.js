@@ -1,6 +1,5 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { fetchBooks, loadMore, nextPage } from '../../redux/books/slice';
 import { BookCard } from '../BookCard';
 import { SearchArea } from '../SearchArea';
@@ -57,7 +56,6 @@ export const Books = () => {
         {books && books.map(item => (
             <BookCard key={item.id} {...item}/>
         ))}
-        
       </div>
       <button onClick={pag}>load more</button>
     </>
