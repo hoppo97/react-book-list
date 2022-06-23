@@ -1,12 +1,17 @@
 import React from 'react';
 import './App.scss';
-
+import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
+import BookPage from './pages/BookPage';
 
 function App() {
   return (
     <div className="App">
-      <Home />
+      <Routes>
+        <Route path="/" element={<Home />}
+        />
+        <Route path="/bookPage/:id" element={ <BookPage />} />
+      </Routes>
     </div>
   );
 };

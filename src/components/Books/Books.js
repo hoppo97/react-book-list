@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { fetchBooks, loadMore, nextPage } from '../../redux/books/slice';
 import { BookCard } from '../BookCard';
 import { SearchArea } from '../SearchArea';
@@ -54,7 +55,7 @@ export const Books = () => {
       {totalCount > 0 ? <p className='mb-20'>Найдено книг: {totalCount}  </p> : <h1 className={styles.booksError}>{isRes}</h1>}
       <div className={styles.books}>
         {books && books.map(item => (
-          <BookCard key={item.id} {...item}/>
+            <BookCard key={item.id} {...item}/>
         ))}
         
       </div>

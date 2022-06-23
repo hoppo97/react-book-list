@@ -1,16 +1,17 @@
 import React from 'react'
-
+import {useNavigate} from 'react-router-dom';
 import styles from './BookCard.module.scss';
-export const BookCard = ({volumeInfo}) => {
-  
+export const BookCard = ({volumeInfo}) => {  
   const isImage = !volumeInfo.imageLinks ? 'Нет изображения' : volumeInfo.imageLinks.thumbnail;
 
-  const arr = [];
-    arr.push(volumeInfo.categories)
-  console.log(arr);
+  const navigate = useNavigate();
+
+  const linkToBookPage = () => {
+    navigate(`/bookPage/${volumeInfo.title}`);
+  };
 
   return (
-    <div className={styles.bookCard}>
+    <div onClick={linkToBookPage} className={styles.bookCard}>
       <img src={isImage} alt={isImage} />
       <h3>{volumeInfo.title}</h3>
       <div className={styles.info}>
