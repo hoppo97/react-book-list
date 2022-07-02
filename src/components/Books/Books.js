@@ -30,7 +30,6 @@ export const Books = () => {
 
   const changeSort = (event) => {
     setSort(event.target.value);
-
   };
 
   const pag = () => {

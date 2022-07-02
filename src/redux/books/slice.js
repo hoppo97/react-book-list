@@ -9,7 +9,6 @@ export const fetchBooks = createAsyncThunk(
         const { 
             books: { maxResult, startIndex },
           } = getState();
-          console.log(maxResult, startIndex);
         const {data} = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=subject:${filter}+intitle:${searchValue}&orderBy=${sort}&maxResults=${maxResult}&startIndex=${startIndex}&key=AIzaSyB6EEPBsFah3IPuvNHP8By61c_cZCPO5MY`);
         return data;
     }
@@ -17,12 +16,12 @@ export const fetchBooks = createAsyncThunk(
 
 export const loadMore = createAsyncThunk(
     'book/loadMore',
-    async ({searchValue, sort, filter}, {dispatch, getState}) => {
+    async ({searchValue, sort, filter}, {getState}) => {
         const { 
             books: { maxResult, startIndex },
           } = getState();
         
-        const {data} = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=intitle:${searchValue}&subject:${filter}:${searchValue}&orderBy=${sort}&maxResults=${maxResult}&startIndex=${startIndex}&key=AIzaSyB6EEPBsFah3IPuvNHP8By61c_cZCPO5MY`);
+        const {data} = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=subject:${filter}+intitle:${searchValue}&orderBy=${sort}&maxResults=${maxResult}&startIndex=${startIndex}&key=AIzaSyB6EEPBsFah3IPuvNHP8By61c_cZCPO5MY`);
         return data;
     }
 );
@@ -65,7 +64,7 @@ export const booksSlice = createSlice({
 
         [loadMore.fulfilled]: (state, action) => {
             state.books = [...state.books, ...action.payload.items];
-            state.totalCount = action.payload.totalItems;
+            // state.totalCount = action.payload.totalItems;
             state.status = 'resolved';
         },
 
