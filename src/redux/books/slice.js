@@ -29,7 +29,7 @@ export const loadMore = createAsyncThunk(
 const initialState = {
     books: [],
     totalCount: 0,
-    maxResult: 3,
+    maxResult: 30,
     startIndex: 0,
     status: '',
 };

@@ -4,7 +4,6 @@ import { Select } from '../UI/Select';
 
 export const AppFilter = ({changeFilter}) => {
   const options = ['all', 'art', 'biography', 'computers', 'history', 'medical', 'poetry'];
-
   
   return (
     <div>

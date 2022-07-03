@@ -1,0 +1,36 @@
+.currentBook {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 36px;
+  margin: 50px 0;
+}
+
+.book {
+  display: flex;
+  justify-content: space-between;
+}
+
+.bookRight {
+  width: 50%;
+}
+
+.authors {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.categories {
+  margin-bottom: 20px;
+}
+
+.description {
+  text-align: left;
+  height: 339px;
+  width: 620px;
+  overflow: auto;
+}
