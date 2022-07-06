@@ -1,44 +1,81 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchBooks, loadMore, nextPage } from '../../redux/books/slice';
+import qs from 'qs';
+import { useNavigate } from 'react-router-dom'
+
+import { fetchBooks, loadMore, nextPage, setFilters } from '../../redux/books/slice';
 import { BookCard } from '../BookCard';
 import { SearchArea } from '../SearchArea';
 
+
 import styles from './Books.module.scss';
+import { setFilterId, setSort } from '../../redux/filterSlice/slice';
 
 export const Books = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {books, totalCount, maxResult, startIndex, status} = useSelector(state => state?.books);
+  const isSearch = React.useRef(false);
+  const isMounted = React.useRef(false);
+
+  const {filterId} = useSelector(state => state.filter);
+  const {sortId} = useSelector(state => state.filter);
+
+  const {books, totalCount, maxResult, startIndex, filter ,status} = useSelector(state => state?.books);
+  
 
   const [searchValue, setSearchValue] = React.useState('');
-  const [filter, setFilter] = React.useState('');
-  const [sort, setSort] = React.useState('relevance');
   const [isRes, setIsRes] = React.useState('');
-  const [page, setPage] = React.useState(0);
+
+  const getBooks = () => {
+  
+    dispatch(fetchBooks({searchValue, sortId, filterId, maxResult, startIndex}));
+  }
 
   React.useEffect(() => {
-    if(filter === 'all'){
-      setFilter('');
+    if(window.location.search) {
+      const params = qs.parse(window.location.search.substring(1));
+
+      dispatch(
+        fetchBooks({
+          ...params,
+        })
+      );
+      isSearch.current = true;
     }
-    dispatch(fetchBooks({searchValue, sort, filter, maxResult, startIndex}));
-  }, [filter, sort]);
+  }, []);
 
+  React.useEffect(() => {
+    
+    if(!isSearch.current) {
+      getBooks();
+    }
 
-  const changeFilter = (event) => {
-    setFilter(event.target.value);
-  };
+    isSearch.current = false;
 
-  const changeSort = (event) => {
-    setSort(event.target.value);
-  };
+  }, [filterId, sortId]);
+
+  React.useEffect(() => {
+    if(isMounted.current) {
+      const queryString = qs.stringify({
+        sortId,
+        filterId,
+        maxResult,
+        startIndex,
+        searchValue,
+      });
+   
+    navigate(`?${queryString}`);
+  }
+  isMounted.current = true;
+  }, [filterId, sortId, startIndex])
 
   const pag = () => {
-    dispatch(nextPage(maxResult));
-    dispatch(loadMore({searchValue, sort, filter}));
+    dispatch(nextPage(maxResult, startIndex));
+    dispatch(loadMore({searchValue, sortId, filterId, maxResult, startIndex}));
   }
 
   const onSubmitSearchValue = (event) => {
-    dispatch(fetchBooks({searchValue, sort, filter, page}));
+    dispatch(fetchBooks({searchValue, sortId, filterId, maxResult, startIndex}));
  
     if(books) {
       setIsRes('По запросу найдено');
@@ -49,7 +86,7 @@ export const Books = () => {
 
   return (
     <>
-      <SearchArea searchValue={searchValue} changeFilter={changeFilter} setSearchValue={setSearchValue} changeSort={changeSort} onSubmitSearchValue={onSubmitSearchValue}/>
+      <SearchArea searchValue={searchValue} /*changeFilter={changeFilter}*/ setSearchValue={setSearchValue} onSubmitSearchValue={onSubmitSearchValue}/>
       {totalCount > 0 ? <p className='mb-20'>Найдено книг: {totalCount}  </p> : <h1 className={styles.booksError}>{isRes}</h1>}
       <div className={styles.books}>
         {books && books.map(item => (

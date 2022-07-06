@@ -1,12 +1,13 @@
 import React from 'react';
 
 import styles from './Select.module.scss';
-export const Select = ({options, onChange}) => {
-    
+export const Select = ({options, changeFilter, filter}) => {
+
+
   return (
-    <select className={styles.select} onChange={onChange}>
-        {options.map(item => (
-            <option key={item} value={item}>{item}</option>
+    <select className={styles.select} onChange={changeFilter}>
+        {options.map((item, i) => (
+          <option key={i} selected={filter === item && filter} value={item}>{item}</option>
         ))}
     </select>
   )

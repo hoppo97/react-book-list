@@ -2,26 +2,26 @@ import { createSlice } from "@reduxjs/toolkit";
 // import { fetchBooks } from "./asyncAction";
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { setFilterId, setSort } from "../filterSlice/slice";
 
 export const fetchBooks = createAsyncThunk(
     'book/fetchBooks',
-    async ({searchValue, sort , filter}, {getState}) => {
-        const { 
-            books: { maxResult, startIndex },
-          } = getState();
-        const {data} = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=subject:${filter}+intitle:${searchValue}&orderBy=${sort}&maxResults=${maxResult}&startIndex=${startIndex}&key=AIzaSyB6EEPBsFah3IPuvNHP8By61c_cZCPO5MY`);
+    async ({searchValue, maxResult, startIndex, filterId, sortId}, {dispatch}) => {
+        dispatch(setFilterId(filterId));
+        dispatch(setSort(sortId));
+        const {data} = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=subject:${filterId}+intitle:${searchValue}&orderBy=${sortId}&maxResults=${maxResult}&startIndex=${startIndex}&key=AIzaSyB6EEPBsFah3IPuvNHP8By61c_cZCPO5MY`);
         return data;
     }
 );
 
 export const loadMore = createAsyncThunk(
     'book/loadMore',
-    async ({searchValue, sort, filter}, {getState}) => {
+    async ({searchValue, filterId,sortId }, {getState}) => {
         const { 
-            books: { maxResult, startIndex },
+            books: { maxResult, startIndex},
           } = getState();
         
-        const {data} = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=subject:${filter}+intitle:${searchValue}&orderBy=${sort}&maxResults=${maxResult}&startIndex=${startIndex}&key=AIzaSyB6EEPBsFah3IPuvNHP8By61c_cZCPO5MY`);
+        const {data} = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=subject:${filterId}+intitle:${searchValue}&orderBy=${sortId}&maxResults=${maxResult}&startIndex=${startIndex}&key=AIzaSyB6EEPBsFah3IPuvNHP8By61c_cZCPO5MY`);
         return data;
     }
 );
@@ -29,7 +29,9 @@ export const loadMore = createAsyncThunk(
 const initialState = {
     books: [],
     totalCount: 0,
-    maxResult: 30,
+    sort: 'relevance',
+    filter: '',
+    maxResult: 3,
     startIndex: 0,
     status: '',
 };
@@ -39,7 +41,7 @@ export const booksSlice = createSlice({
     initialState,
     reducers: {
         nextPage(state, action) {
-            state.startIndex = state.startIndex + action.payload;
+            state.startIndex = state.startIndex + Number(action.payload);
         }
     },
 
@@ -64,7 +66,8 @@ export const booksSlice = createSlice({
 
         [loadMore.fulfilled]: (state, action) => {
             state.books = [...state.books, ...action.payload.items];
-            // state.totalCount = action.payload.totalItems;
+            state.totalCount = action.payload.totalItems;
+            // state.startIndex = state.startIndex + Number(action.payload.startIndex);
             state.status = 'resolved';
         },
 
@@ -74,7 +77,7 @@ export const booksSlice = createSlice({
     }
 });
 
-export const {nextPage} = booksSlice.actions;
+export const {nextPage,setFilters} = booksSlice.actions;
 
 export default booksSlice.reducer;
 

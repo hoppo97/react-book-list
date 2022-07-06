@@ -15,11 +15,10 @@ export const getIdCurrentBook = createAsyncThunk(
   }
 );
 
-
 const initialState = {
   currentBook: [],
   status: ''
-}
+};
 
 export const currentBook = createSlice({
   name: 'currentBook',
