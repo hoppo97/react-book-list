@@ -3,31 +3,24 @@ import { useDispatch, useSelector } from 'react-redux';
 import qs from 'qs';
 import { useNavigate } from 'react-router-dom'
 
-import { fetchBooks, loadMore, nextPage, setFilters } from '../../redux/books/slice';
+import { fetchBooks, loadMore, nextPage } from '../../redux/books/slice';
+import {setFilters} from '../../redux/filterSlice/slice';
 import { BookCard } from '../BookCard';
-import { SearchArea } from '../SearchArea';
-
 
 import styles from './Books.module.scss';
-import { setFilterId, setSort } from '../../redux/filterSlice/slice';
 
 export const Books = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const isSearch = React.useRef(false);
   const isMounted = React.useRef(false);
 
-  const {filterId} = useSelector(state => state.filter);
-  const {sortId} = useSelector(state => state.filter);
+  const {filterId, sortId, searchValue} = useSelector(state => state.filter);
+  const {books, totalCount, maxResult, startIndex, status} = useSelector(state => state?.books);
 
-  const {books, totalCount, maxResult, startIndex, filter ,status} = useSelector(state => state?.books);
-  
-
-  const [searchValue, setSearchValue] = React.useState('');
-  const [isRes, setIsRes] = React.useState('');
 
   const getBooks = () => {
-  
     dispatch(fetchBooks({searchValue, sortId, filterId, maxResult, startIndex}));
   }
 
@@ -36,20 +29,19 @@ export const Books = () => {
       const params = qs.parse(window.location.search.substring(1));
 
       dispatch(
-        fetchBooks({
+        setFilters({
           ...params,
         })
       );
+      
       isSearch.current = true;
     }
   }, []);
 
   React.useEffect(() => {
-    
     if(!isSearch.current) {
       getBooks();
     }
-
     isSearch.current = false;
 
   }, [filterId, sortId]);
@@ -61,39 +53,33 @@ export const Books = () => {
         filterId,
         maxResult,
         startIndex,
-        searchValue,
       });
    
     navigate(`?${queryString}`);
   }
   isMounted.current = true;
-  }, [filterId, sortId, startIndex])
+  }, [filterId, sortId, startIndex]);
 
   const pag = () => {
-    dispatch(nextPage(maxResult, startIndex));
-    dispatch(loadMore({searchValue, sortId, filterId, maxResult, startIndex}));
-  }
-
-  const onSubmitSearchValue = (event) => {
-    dispatch(fetchBooks({searchValue, sortId, filterId, maxResult, startIndex}));
- 
     if(books) {
-      setIsRes('По запросу найдено');
+      dispatch(nextPage(maxResult, startIndex));
+      dispatch(loadMore({searchValue, sortId, filterId, maxResult, startIndex}));
     } else {
-      setIsRes('Ничего не найдено')
+      alert("Книжек больше нет!")
     }
   };
 
   return (
     <>
-      <SearchArea searchValue={searchValue} /*changeFilter={changeFilter}*/ setSearchValue={setSearchValue} onSubmitSearchValue={onSubmitSearchValue}/>
-      {totalCount > 0 ? <p className='mb-20'>Найдено книг: {totalCount}  </p> : <h1 className={styles.booksError}>{isRes}</h1>}
-      <div className={styles.books}>
+      {totalCount > 0 ? <p className='mb-20'>Найдено книг: {totalCount} </p> : <h1 className={styles.booksError}>Ничего не найдено</h1>}
+      {status === 'loading' ? <h1>Загрузка...</h1> : <> <div className={styles.books}>
         {books && books.map(item => (
             <BookCard key={item.id} {...item}/>
         ))}
       </div>
-      <button onClick={pag}>load more</button>
+      <button disabled={totalCount < 30 && true} onClick={pag}>load more</button>
+      </>
+      }
     </>
   )
 };

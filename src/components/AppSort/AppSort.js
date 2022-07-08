@@ -1,9 +1,7 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-
 import {Select} from '../UI/Select';
 
-export const AppSort = ({changeFilter, filter}) => {
+export const AppSort = React.memo(({changeFilter, filter}) => {
   const options = ['relevance', 'newest'];
   
   return (
@@ -11,4 +9,4 @@ export const AppSort = ({changeFilter, filter}) => {
         <Select options={options} changeFilter={changeFilter} filter={filter}/>
     </div>
   )
-}
+});

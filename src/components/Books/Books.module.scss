@@ -1,11 +1,24 @@
 .books {
   width: 100%;
-  max-width: 1170px;
-  margin: 0 auto;
+  max-width: 1140px; 
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
+  margin: 0 auto;
+
+  @media screen and (max-width: 1200px) {
+    max-width: 960px; 
+  }
+
+  @media screen and (max-width: 992px) {
+    max-width: 720px; 
+  }
+
+  @media screen and (max-width: 768px) {
+    max-width: 540px; 
+  }
 }
 
 .booksError {
-  margin: auto;
+  margin: 50px auto;
 }

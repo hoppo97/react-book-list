@@ -2,6 +2,7 @@
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 15px;
 }
 
 .title {
@@ -10,12 +11,21 @@
 }
 
 .book {
+
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+  
+  img {
+    width: 100%;
+    max-width: 400px;
+    height: 600px;
+    margin-bottom: 50px;
+  }
 }
 
-.bookRight {
-  width: 50%;
+.info {
+  margin: 0 auto;
 }
 
 .authors {
@@ -25,12 +35,36 @@
 }
 
 .categories {
+  display: flex;
   margin-bottom: 20px;
+
+  li {
+    margin-left: 10px;
+    
+    &:first-child {
+      margin-left: 0;
+    }
+  }
 }
 
 .description {
   text-align: left;
   height: 339px;
-  width: 620px;
+  width: 100%;
+  max-width: 620px;
   overflow: auto;
+
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 8px;
+    border: 1px solid #d4d4d4;
+
+    &:hover {
+      background: #979797;
+    }
+  }
 }

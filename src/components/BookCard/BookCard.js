@@ -1,11 +1,10 @@
 import React from 'react'
 import { Link, useParams } from 'react-router-dom';
 import styles from './BookCard.module.scss';
-export const BookCard = ({id, volumeInfo}) => {  
+export const BookCard = React.memo(({id, volumeInfo}) => {  
 
   const cartegory = (categories) => {
     const arrCategories = categories?.join('').split(' ');
-
     return arrCategories?.length > 1 ? arrCategories[0] : categories;
   };
 
@@ -22,6 +21,6 @@ export const BookCard = ({id, volumeInfo}) => {
       </Link>
     </div>
   )
-};
+});
 
 
