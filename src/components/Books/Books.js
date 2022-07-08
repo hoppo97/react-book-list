@@ -1,11 +1,15 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import qs from 'qs';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 
 import { fetchBooks, loadMore, nextPage } from '../../redux/books/slice';
 import {setFilters} from '../../redux/filterSlice/slice';
+
 import { BookCard } from '../BookCard';
+
+import { selectBooksData } from '../../redux/books/selectors';
+import { selectFilter } from '../../redux/filterSlice/selectors';
 
 import styles from './Books.module.scss';
 
@@ -16,8 +20,8 @@ export const Books = () => {
   const isSearch = React.useRef(false);
   const isMounted = React.useRef(false);
 
-  const {filterId, sortId, searchValue} = useSelector(state => state.filter);
-  const {books, totalCount, maxResult, startIndex, status} = useSelector(state => state?.books);
+  const {filterId, sortId, searchValue} = useSelector(selectFilter);
+  const {books, totalCount, maxResult, startIndex, status} = useSelector(selectBooksData);
 
 
   const getBooks = () => {

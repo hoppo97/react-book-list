@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from './Current.Module.scss';
+import styles from './Current.module.scss';
 
 export const CurrentBook = ({info}) => {
 

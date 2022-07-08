@@ -5,7 +5,7 @@ import axios from 'axios';
 
 export const getIdCurrentBook = createAsyncThunk(
   'book/getIdCurrentBook',
-  async function (id, {rejectWithValue, dispatch}) {
+  async function (id, {rejectWithValue}) {
     try {
       const {data} = await axios.get(`https://www.googleapis.com/books/v1/volumes/${id}`);
       return data;

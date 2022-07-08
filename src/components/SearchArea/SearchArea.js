@@ -5,15 +5,19 @@ import { AppFilter } from '../AppFilter';
 import { AppSort } from '../AppSort';
 import { Input } from '../UI/Input';
 
+import { fetchBooks } from '../../redux/books/slice';
+
+import {selectBooksData} from '../../redux/books/selectors';
+import { selectFilter } from '../../redux/filterSlice/selectors';
 
 import styles from './SearchArea.module.scss';
-import { fetchBooks } from '../../redux/books/slice';
+
 export const SearchArea = React.memo(() => {
 
   const dispatch = useDispatch();
   
-  const {filterId, sortId, searchValue} = useSelector(state => state.filter);
-  const {maxResult, startIndex} = useSelector(state => state?.books);
+  const {filterId, sortId, searchValue} = useSelector(selectFilter);
+  const {maxResult, startIndex} = useSelector(selectBooksData);
 
   
   const onSubmitSearchValue = React.useCallback(() => {
