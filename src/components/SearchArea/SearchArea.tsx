@@ -24,7 +24,7 @@ export const SearchArea: React.FC = React.memo(() => {
     dispatch(fetchBooks({searchValue, sortId, filterId, maxResult, startIndex}));
   }, [searchValue]);
 
-  const changeFilter = React.useCallback((event) => {
+  const changeFilter = React.useCallback((event: React.ChangeEvent<HTMLSelectElement>) => {
     if(event.target.value === 'all') {
       dispatch(setFilterId(''));
     } else {
@@ -32,11 +32,11 @@ export const SearchArea: React.FC = React.memo(() => {
     }
   }, []);
 
-  const changeSort = React.useCallback((event) => {
+  const changeSort = React.useCallback((event: React.ChangeEvent<HTMLSelectElement>) => {
     dispatch(setSort(event.target.value));
   }, []);
 
-  const changeSearchValue = React.useCallback((event) => {
+  const changeSearchValue = React.useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setSearchValue(event.target.value));
   }, []);
 

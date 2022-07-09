@@ -23,8 +23,6 @@ export const Books = () => {
   const {filterId, sortId, searchValue} = useSelector(selectFilter);
   const {books, totalCount, maxResult, startIndex, status} = useSelector(selectBooksData);
 
-  console.log(books);
-
   const getBooks = () => {
     dispatch(fetchBooks({searchValue, sortId, filterId, maxResult, startIndex}));
   }
@@ -79,7 +77,7 @@ export const Books = () => {
       {totalCount > 0 ? <p className='mb-20'>Найдено книг: {totalCount} </p> : <h1 className={styles.booksError}>Ничего не найдено</h1>}
       {status === 'loading' ? <h1>Загрузка...</h1> : <> <div className={styles.books}>
         {books && books.map(item => (
-            <BookCard key={item.id} {...item}/>
+            <BookCard key={item.etag} {...item}/>
         ))}
       </div>
       <button disabled={totalCount < 30 && true} onClick={pag}>load more</button>
