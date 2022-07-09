@@ -1,13 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from 'axios';
-
+import {getBookById} from '../../utils/getBooks';
 
 export const getIdCurrentBook = createAsyncThunk(
   'book/getIdCurrentBook',
   async function (id, {rejectWithValue}) {
     try {
-      const {data} = await axios.get(`https://www.googleapis.com/books/v1/volumes/${id}`);
+      const data = await getBookById(id);
+      console.log(data);
       
       return data;
     } catch (error) {
@@ -16,20 +16,36 @@ export const getIdCurrentBook = createAsyncThunk(
   }
 );
 
-const initialState = {
-  currentBook: [],
+
+type Currentbook = {
+  id: string,
+  etag: string,
+  authors: string[],
+  description: string,
+  categories: string[],
+  smallThumbnail: string,
+  title: string,
+}
+interface CurrentBookSliceState {
+  currentBook: Currentbook | null,
+  status: string,
+};
+
+const initialState: CurrentBookSliceState = {
+  currentBook: null,
   status: ''
 };
 
 export const currentBook = createSlice({
   name: 'currentBook',
   initialState,
-
+  reducers: {},
   extraReducers : {
     [getIdCurrentBook.pending]: (state) => {
       state.status = 'loading';
     },
     [getIdCurrentBook.fulfilled]: (state, action) => {
+      console.log(action.payload);
       state.currentBook = action.payload;
       state.status = 'resolved';
     },

@@ -30,7 +30,24 @@ export const loadMore = createAsyncThunk(
     }
 );
 
-const initialState = {
+type Books = {
+    id: string,
+    etag: string,
+    authors: string[],
+    categories: string[],
+    thumbnail: string,
+    title: string,
+}
+
+interface BooksSliceState {
+    books: Books[],
+    totalCount: number,
+    maxResult: number,
+    startIndex: number,
+    status: string,
+}
+
+const initialState: BooksSliceState = {
     books: [],
     totalCount: 0,
     maxResult: 30,

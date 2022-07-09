@@ -9,17 +9,21 @@ import { selectCurrentBook } from '../redux/currentBook/selectors';
 const BookPage: React.FC = () => {
   const {bookId} = useParams();
   const dispatch = useDispatch();
-  const {currentBook: {id, volumeInfo}, status} = useSelector(selectCurrentBook);
+  const {currentBook, status} = useSelector(selectCurrentBook);
 
   React.useEffect(() => {
-    if(id !== bookId) {
+    if(currentBook && currentBook.id !== bookId) {
       dispatch(getIdCurrentBook(bookId));
     };
   }, []);
 
+  if(!currentBook) {
+    return null;
+  } 
+
   return (
     <>
-      {status === 'loading' ? <h1>Загрузка...</h1> : <CurrentBook info={volumeInfo}/>}
+      {status === 'loading' ? <h1>Загрузка...</h1> : <CurrentBook {...currentBook}/>}
     </>
   ) 
 };

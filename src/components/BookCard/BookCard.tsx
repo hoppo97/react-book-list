@@ -4,21 +4,19 @@ import styles from './BookCard.module.scss';
 
 type BookCardprops = {
   id: string,
-  imageLinks: {
-    thumbnail: string,
-  },
+  thumbnail: string,
   categories: string[],
-  authors: string,
+  authors: string[],
   title: string,
 }
-export const BookCard: React.FC<BookCardprops> = React.memo(({id, authors, categories, imageLinks, title}) => {  
+export const BookCard: React.FC<BookCardprops> = React.memo(({id, authors, categories, thumbnail, title}) => {  
   
   const cartegory = (categories: string[]) => {
     const arrCategories = categories?.join('').split(' ');
     return arrCategories?.length > 1 ? arrCategories[0] : categories;
   };
 
-  const isImage = !imageLinks ? 'Нет изображения' : imageLinks.thumbnail;
+  const isImage = !thumbnail ? 'Нет изображения' : thumbnail;
 
   return (
     <div className={styles.bookCard}>
