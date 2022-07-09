@@ -23,6 +23,7 @@ export const Books = () => {
   const {filterId, sortId, searchValue} = useSelector(selectFilter);
   const {books, totalCount, maxResult, startIndex, status} = useSelector(selectBooksData);
 
+  console.log(books);
 
   const getBooks = () => {
     dispatch(fetchBooks({searchValue, sortId, filterId, maxResult, startIndex}));

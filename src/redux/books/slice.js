@@ -56,7 +56,7 @@ export const booksSlice = createSlice({
         },
 
         [fetchBooks.fulfilled]: (state, action) => {
-            state.books = action.payload.items;
+            state.books = action.payload.books;
             state.totalCount = action.payload.totalItems;
             state.status = 'resolved';
         },
@@ -67,7 +67,7 @@ export const booksSlice = createSlice({
 
 
         [loadMore.fulfilled]: (state, action) => {
-            state.books = [...state.books, ...action.payload.items];
+            state.books = [...state.books, ...action.payload.books];
             state.totalCount = action.payload.totalItems;
             state.status = 'resolved';
         },

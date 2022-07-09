@@ -20,13 +20,13 @@ export const CurrentBook = ({info}) => {
             }
             {categories && 
               <>
-              <h3 className="mb-10">Категории</h3>
-              <ul className={styles.categories}>
-                {categories.map((item, i) => (
-                    <li key={i}>{item}</li>
-                )
-                )}
-              </ul>
+                <h3 className="mb-10">Категории</h3>
+                <ul className={styles.categories}>
+                  {categories.map((item, i) => (
+                      <li key={i}>{item}</li>
+                  )
+                  )}
+                </ul>
               </>
             }
           </div>

@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import { selectCurrentBook } from '../redux/currentBook/selectors';
 
 
-const BookPage = () => {
+const BookPage: React.FC = () => {
   const {bookId} = useParams();
   const dispatch = useDispatch();
   const {currentBook: {id, volumeInfo}, status} = useSelector(selectCurrentBook);
@@ -22,6 +22,6 @@ const BookPage = () => {
       {status === 'loading' ? <h1>Загрузка...</h1> : <CurrentBook info={volumeInfo}/>}
     </>
   ) 
-}
+};
 
-export default BookPage
+export default BookPage;

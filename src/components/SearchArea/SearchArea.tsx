@@ -12,7 +12,7 @@ import { selectFilter } from '../../redux/filterSlice/selectors';
 
 import styles from './SearchArea.module.scss';
 
-export const SearchArea = React.memo(() => {
+export const SearchArea: React.FC = React.memo(() => {
 
   const dispatch = useDispatch();
   
