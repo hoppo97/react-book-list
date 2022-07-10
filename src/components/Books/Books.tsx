@@ -88,7 +88,7 @@ export const Books = () => {
 
   return (
     <>
-      {status === 'loading' ? <h1>Загрузка...</h1> : <> 
+      {status === 'loading' ? <h1>Загрузка...</h1> : status === 'error' ? <h2>Ошибка</h2> : <> 
         <p className='mb-20'>Найдено книг: { totalCount } </p>
         <div className={ styles.books }>
         {books && books.map(item => (

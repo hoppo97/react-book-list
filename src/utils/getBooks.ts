@@ -7,7 +7,7 @@ const { BOOKS_API_WITH_PARAMS, BOOKS_API_WITH_ID } = AXIOS_CONFIG;
 
 
 export const getBooks = async (params: FetchBooksArgs) => {
-  
+
   const { data } = await axios.get(BOOKS_API_WITH_PARAMS(params));
   
   const { items, totalItems } = data as DataBooks;
