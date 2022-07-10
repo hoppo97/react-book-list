@@ -19,9 +19,17 @@ export const SearchArea: React.FC = React.memo(() => {
   
   const {filterId, sortId, searchValue, startIndex, maxResult } = useSelector(selectFilter);
   
+
   const onSubmitSearchValue = React.useCallback(() => {
-    dispatch(fetchBooks({searchValue, sortId, filterId, maxResult, startIndex}));
+      dispatch(fetchBooks({searchValue, sortId, filterId, maxResult, startIndex}));
   }, [searchValue]);
+
+  const onKeyPress = React.useCallback((event: React.KeyboardEvent<HTMLInputElement>) => {
+    if(event.key === 'Enter') {
+      dispatch(fetchBooks({searchValue, sortId, filterId, maxResult, startIndex}));
+    }
+    
+}, [searchValue]);
 
   const changeFilter = React.useCallback((event: React.ChangeEvent<HTMLSelectElement>) => {
     if(event.target.value === 'all') {
@@ -42,7 +50,7 @@ export const SearchArea: React.FC = React.memo(() => {
   return (
     <div className={styles.searchArea}>
       <div className='d-flex justify-center mb-20'>
-        <Input searchValue={searchValue} setSearchValue={changeSearchValue}/>
+        <Input searchValue={searchValue} setSearchValue={changeSearchValue} onKeyPress={onKeyPress}/>
         <Button children={'search'} onClick={onSubmitSearchValue}/>
       </div>
 
