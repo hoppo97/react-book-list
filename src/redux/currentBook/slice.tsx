@@ -1,23 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import {getBookById} from '../../utils/getBooks';
+import { getBookById } from '../../utils/getBooks';
 
-export const getIdCurrentBook = createAsyncThunk(
-  'book/getIdCurrentBook',
-  async function (id, {rejectWithValue}) {
-    try {
-      const data = await getBookById(id);
-      console.log(data);
-      
-      return data;
-    } catch (error) {
-     return rejectWithValue(error);
-    }
-  }
-);
-
-
-type Currentbook = {
+export type Currentbook = {
   id: string,
   etag: string,
   authors: string[],
@@ -28,33 +13,47 @@ type Currentbook = {
 }
 interface CurrentBookSliceState {
   currentBook: Currentbook | null,
-  status: string,
+  status: 'loading' | 'resolved' | 'error',
 };
 
 const initialState: CurrentBookSliceState = {
   currentBook: null,
-  status: ''
+  status: 'loading'
 };
+
+export const getIdCurrentBook = createAsyncThunk(
+  'book/getIdCurrentBook',
+  async function (id: string | undefined, {rejectWithValue}) {
+    try {
+      const data = await getBookById(id);
+      return data;
+    } catch (error) {
+     return rejectWithValue(error);
+    }
+  }
+);
 
 export const currentBook = createSlice({
   name: 'currentBook',
   initialState,
   reducers: {},
-  extraReducers : {
-    [getIdCurrentBook.pending]: (state) => {
+
+  extraReducers: (builder) => {
+    builder.addCase(getIdCurrentBook.pending, (state, action) => {
       state.status = 'loading';
-    },
-    [getIdCurrentBook.fulfilled]: (state, action) => {
-      console.log(action.payload);
+    }); 
+
+    builder.addCase(getIdCurrentBook.fulfilled, (state, action) => {
       state.currentBook = action.payload;
       state.status = 'resolved';
-    },
-    [getIdCurrentBook.rejected]: (state) => {
-      state.status = 'rejected';
-    }
+    }); 
+
+    builder.addCase(getIdCurrentBook.rejected, (state, action) => {
+      state.status = 'error';
+    }); 
   }
 });
 
-export const {} = currentBook.reducer;
+export const { } = currentBook.reducer;
 
 export default currentBook.reducer;

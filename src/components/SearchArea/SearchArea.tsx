@@ -1,5 +1,5 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { setFilterId, setSearchValue, setSort } from '../../redux/filterSlice/slice';
 import { AppFilter } from '../AppFilter';
 import { AppSort } from '../AppSort';
@@ -7,18 +7,16 @@ import { Input } from '../UI/Input';
 
 import { fetchBooks } from '../../redux/books/slice';
 
-import {selectBooksData} from '../../redux/books/selectors';
 import { selectFilter } from '../../redux/filterSlice/selectors';
 
 import styles from './SearchArea.module.scss';
+import { useAppDispatch } from '../../redux/store';
 
 export const SearchArea: React.FC = React.memo(() => {
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   
-  const {filterId, sortId, searchValue} = useSelector(selectFilter);
-  const {maxResult, startIndex} = useSelector(selectBooksData);
-
+  const {filterId, sortId, searchValue, startIndex, maxResult } = useSelector(selectFilter);
   
   const onSubmitSearchValue = React.useCallback(() => {
     dispatch(fetchBooks({searchValue, sortId, filterId, maxResult, startIndex}));

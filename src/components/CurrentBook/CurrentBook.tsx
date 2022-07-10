@@ -10,7 +10,7 @@ type CurrentBookProps = {
 };
 
 
-export const CurrentBook: React.FC<CurrentBookProps> = ({authors, title, categories, description, smallThumbnail}) => {
+export const CurrentBook: React.FC<CurrentBookProps> = ({authors, title, categories, description, smallThumbnail}, status) => {
 
   const allCategories = categories && categories[0].split(' / ');
   
@@ -23,13 +23,13 @@ export const CurrentBook: React.FC<CurrentBookProps> = ({authors, title, categor
           <div className={styles.info}>
             {authors && 
               <>
-                <h2>Авторы</h2>
-                <p className={styles.authors}>{authors.join(', ')}</p>
+                <h2 className={styles.authors}>Авторы</h2>
+                <p className={styles.authorsName}>{authors.join(', ')}</p>
               </>
             }
             {categories && 
               <>
-                <h3 className="mb-10">Категории</h3>
+                <h3 className="mb-20">Категории</h3>
                 <ul className={styles.categories}>
                   {allCategories.map((item, i) => (
                       <li key={i}>{item}</li>
