@@ -1,37 +1,50 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import qs from 'qs';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-
-import { fetchBooks, loadMore, nextPage } from '../../redux/books/slice';
-import {setFilters} from '../../redux/filterSlice/slice';
-
+import { useAppDispatch } from '../../redux/store';
+import { fetchBooks, loadMore } from '../../redux/books/slice';
+import { setFilters, setStartIndex } from '../../redux/filterSlice/slice';
+import { FetchBooksArgs } from '../../redux/books/slice';
 import { BookCard } from '../BookCard';
 
 import { selectBooksData } from '../../redux/books/selectors';
 import { selectFilter } from '../../redux/filterSlice/selectors';
 
+import qs from 'qs';
+
 import styles from './Books.module.scss';
+import { Button } from '../UI/Button';
+
 
 export const Books = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const isSearch = React.useRef(false);
   const isMounted = React.useRef(false);
 
-  const {filterId, sortId, searchValue} = useSelector(selectFilter);
-  const {books, totalCount, maxResult, startIndex, status} = useSelector(selectBooksData);
+  const { filterId, sortId, searchValue, maxResult, startIndex} = useSelector(selectFilter);
+  const { books, totalCount, status } = useSelector(selectBooksData);
+
+
+  const params = {
+    searchValue,
+    sortId,
+    filterId,
+    maxResult,
+    startIndex,
+  };
 
 
   const getBooks = () => {
-    dispatch(fetchBooks({searchValue, sortId, filterId, maxResult, startIndex}));
+    dispatch(fetchBooks(params));
   }
 
   React.useEffect(() => {
     if(window.location.search) {
-      const params = qs.parse(window.location.search.substring(1));
-
+      const params = qs.parse(window.location.search.substring(1)) as unknown as FetchBooksArgs;
+      console.log(params);
+      
       dispatch(
         setFilters({
           ...params,
@@ -66,8 +79,8 @@ export const Books = () => {
 
   const pag = () => {
     if(books) {
-      dispatch(nextPage(maxResult, startIndex));
-      dispatch(loadMore({searchValue, sortId, filterId, maxResult, startIndex}));
+      dispatch(setStartIndex(maxResult));
+      dispatch(loadMore(params));
     } else {
       alert("Книжек больше нет!")
     }
@@ -75,13 +88,14 @@ export const Books = () => {
 
   return (
     <>
-      {totalCount > 0 ? <p className='mb-20'>Найдено книг: {totalCount} </p> : <h1 className={styles.booksError}>Ничего не найдено</h1>}
-      {status === 'loading' ? <h1>Загрузка...</h1> : <> <div className={styles.books}>
+      {status === 'loading' ? <h1>Загрузка...</h1> : <> 
+        <p className='mb-20'>Найдено книг: { totalCount } </p>
+        <div className={ styles.books }>
         {books && books.map(item => (
-            <BookCard key={item.id} {...item}/>
+            <BookCard key={ item.etag } { ...item }/>
         ))}
       </div>
-      <button disabled={totalCount < 30 && true} onClick={pag}>load more</button>
+      <Button children={'Load more'} onClick={pag} totalCount={totalCount} />
       </>
       }
     </>

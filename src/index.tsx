@@ -10,13 +10,18 @@ import App from './App';
 import './index.scss';
 import 'macro-css';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const rootElem = document.getElementById('root');
 
-root.render(
-  <BrowserRouter>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </BrowserRouter>
-);
+
+if(rootElem) {
+  const root = ReactDOM.createRoot(rootElem);
+  root.render(
+    <BrowserRouter>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </BrowserRouter>
+  );
+}
+
 

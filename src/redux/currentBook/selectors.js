@@ -1,1 +1,0 @@
-export const selectCurrentBook = (state) => state.currentBook;
