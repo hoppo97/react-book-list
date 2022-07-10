@@ -11,6 +11,7 @@ import { selectFilter } from '../../redux/filterSlice/selectors';
 
 import styles from './SearchArea.module.scss';
 import { useAppDispatch } from '../../redux/store';
+import { Button } from '../UI/Button';
 
 export const SearchArea: React.FC = React.memo(() => {
 
@@ -42,7 +43,7 @@ export const SearchArea: React.FC = React.memo(() => {
     <div className={styles.searchArea}>
       <div className='d-flex justify-center mb-20'>
         <Input searchValue={searchValue} setSearchValue={changeSearchValue}/>
-        <button onClick={onSubmitSearchValue}>search</button>
+        <Button children={'search'} onClick={onSubmitSearchValue}/>
       </div>
 
       <div className='d-flex justify-center mb-20'>

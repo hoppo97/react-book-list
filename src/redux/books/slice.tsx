@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { getBooks } from "../../utils/getBooks";
+import { setStartIndex } from "../filterSlice/slice";
 
 export type FetchBooksArgs = {
     searchValue: string,
@@ -41,7 +42,7 @@ const initialState: BooksSliceState = {
 
 export const fetchBooks = createAsyncThunk(
     'book/fetchBooks',
-    async (params: FetchBooksArgs, { rejectWithValue }) => {
+    async (params: FetchBooksArgs, { rejectWithValue , dispatch}) => {
         try {
             const books = await getBooks(params);
             return books;
@@ -53,8 +54,9 @@ export const fetchBooks = createAsyncThunk(
 
 export const loadMore = createAsyncThunk(
     'book/loadMore',
-    async (params: FetchBooksArgs, { rejectWithValue }) => {
+    async (params: FetchBooksArgs, { rejectWithValue , dispatch}) => {
         try {
+           
             const books = await getBooks(params);
             return books;
         } catch (error) {
@@ -89,7 +91,6 @@ export const booksSlice = createSlice({
 
         builder.addCase(loadMore.fulfilled, (state, action) => {
             state.books = [...state.books, ...action.payload.books];
-            state.totalCount = action.payload.totalItems;
             state.status = 'resolved';
         });
 
